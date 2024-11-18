@@ -398,7 +398,7 @@ def listen(config):
         conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
         cur = conn.cursor()
 
-        # Set up a LISTENER for loyalty points
+        # Set up a LISTENER for POS orders
         cur.execute(f"LISTEN {config['psql_channel']}")
         logger.info(
             f"{connection_format(config)}: Listening for {config['psql_channel']} events..."
@@ -481,7 +481,7 @@ def add_trigger_fn(config):
         conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
         cur = conn.cursor()
 
-        # The command to perform for loyalty points listener
+        # The command to perform for pos orders listener
         sqlcmd_trigger = sqlcmd_create_trigger(
             config["dbtable"], config["psql_trigger"], config["psql_channel"], "INSERT"
         )
@@ -511,12 +511,12 @@ def remove_trigger_fn(config):
         conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
         cur = conn.cursor()
 
-        # The command to perform for loyalty points
-        sqlcmd_unlisten_loyalty_points = sqlcmd_remove_trigger(
+        # The command to perform for pos orders
+        sqlcmd_unlisten = sqlcmd_remove_trigger(
             config["dbtable"], config["psql_trigger"]
         )
         # Execute the command
-        cur.execute(f"{sqlcmd_unlisten_loyalty_points}")
+        cur.execute(f"{sqlcmd_unlisten}")
         logger.info(
             f"{connection_format(config)} Success: Removed trigger {config['psql_trigger']} and function {config['psql_trigger']}Fn."
         )
