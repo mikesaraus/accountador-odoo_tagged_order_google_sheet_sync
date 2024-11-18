@@ -1,10 +1,13 @@
 [
   {
-    "tag_id": 1,
     "dbname": "",
     "dbuser": "",
     "dbpassword": "",
     "dbhost": "localhost",
-    "dbport": 5432
+    "dbport": 5435,
+    "tag_id": 0,
+    "google_sheet_id": "",
+    "service_account_json": "cred.json",
+    "google_sheet_range": "Sheet1!A2"
   }
 ]

@@ -15,6 +15,10 @@ import psycopg2.extensions
 from dotenv import load_dotenv
 from decimal import Decimal
 
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+    
 exit_flag = threading.Event()
 
 # Load environment variables from the .env file
@@ -220,15 +224,11 @@ def format_sync_data(data):
         for entry in data
     ]
     
-def sync_to_sheet(data):
-    from google.oauth2 import service_account
-    from googleapiclient.discovery import build
-    from googleapiclient.errors import HttpError
-
+def sync_to_sheet(data, config):
     formatted_data = format_sync_data(data)
     # Load credentials from the service account JSON file
     credentials = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_JSON, scopes=['https://www.googleapis.com/auth/spreadsheets']
+        config.get("service_account_json"), scopes=['https://www.googleapis.com/auth/spreadsheets']
     )
     # Build the Google Sheets API client
     service = build('sheets', 'v4', credentials=credentials)
@@ -236,8 +236,8 @@ def sync_to_sheet(data):
     try:
         # Use 'spreadsheets.values.append' to add data to the sheet
         request = service.spreadsheets().values().append(
-            spreadsheetId=SHEET_ID,
-            range=RANGE,
+            spreadsheetId=config.get("google_sheet_id"),
+            range=config.get("google_sheet_range"),
             valueInputOption="RAW",  # or "USER_ENTERED" if you want Google Sheets to interpret values
             body={"values": formatted_data}
         )
@@ -382,7 +382,7 @@ def listen(config):
                                     merged_item[key] = ""
                             sheet_payload.append(merged_item)
                     logger.info(f"sheet_payload {sheet_payload}")
-                    sync_to_sheet(sheet_payload)
+                    sync_to_sheet(sheet_payload, config)
                     
                 else:
                     logger.error(
@@ -550,7 +550,10 @@ def format_config(cfg):
         "dbtbl_order_line": dbtbl_order_line,
         "dbtbl_payment": dbtbl_payment,
         "dbtbl_payment_method": dbtbl_payment_method,
-        "dbtbl_product_tagging": dbtbl_product_tagging
+        "dbtbl_product_tagging": dbtbl_product_tagging,
+        "google_sheet_id": cfg.get("google_sheet_id", SHEET_ID),
+        "google_sheet_range": cfg.get("google_sheet_range", RANGE),
+        "service_account_json": cfg.get("service_account_json", SERVICE_ACCOUNT_JSON)
     }
     return config
 

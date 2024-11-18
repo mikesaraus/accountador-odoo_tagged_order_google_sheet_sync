@@ -11,8 +11,26 @@
 ### Install Python and the required modules
 
 ```bash
-sudo apt install python3 python3-pip
-pip install -r requirements.txt
+# Python
+sudo apt install python3
+# Pip
+sudo apt install python3-pip
+
+# Modules
+# using pip
+pip3 install -r requirements.txt
+# or
+pip3 install dotenv
+pip3 install psycopg2
+pip3 install requests
+pip3 install google-api-python-client
+pip3 install google-auth
+pip3 install google-auth-oauthlib
+pip3 install google-auth-httplib2
+# or using apt package manager for system wide (service)
+sudo apt install python3-dotenv python3-psycopg2 python3-requests python3-google-auth python3-google-auth-oauthlib python3-google-auth-httplib2
+# install google-api-python-client for service
+sudo pip3 install --break-system-packages google-api-python-client
 ```
 
 ### Configure `.env`
