@@ -1,18 +1,12 @@
-# Odoo Loyalty Program - Extender
+# Odoo Tagged Order - Sync (Google Sheet)
 
-## Sync Loyalty Programs from multiple Odoo instances using the unique customer's barcode
+## Sync custom tagged products orders to google sheeet
 
 ### Requirements:
 
 - Python
-- Odoo v16
+- Odoo v16^
 - PostresSQL Database
-
-### Notes:
-
-You must configure Odoo to enable the `"Discounts, Loyalty & Gift Card"`.
-
-Configure customer to have a unique `barcode` as it is used to identify unique customers.
 
 ### Install Python and the required modules
 
@@ -32,7 +26,7 @@ nano .env
 
 ### Important .env keys
 
-- `tag_id` - <b>Important!</b> The tag id for product that will be sync
+- `tag_id` - <b>all db fallback tag id!</b> The tag id for product that will be sync
 - `dbname` - the database name
 - `dbuser` - the database user
 - `dbpassword` - the database password of the user
@@ -46,6 +40,7 @@ nano .env
 cp db.config.sample.json db.config.json
 # then update the list accordingly
 nano db.config.json
+# Note: please specify the tag id
 ```
 
 ### Display help information
