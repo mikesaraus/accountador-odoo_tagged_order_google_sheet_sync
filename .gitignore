@@ -1,0 +1,22 @@
+.env
+db.config.json
+
+# Possible Credentials
+cred.json
+credentials.json
+
+.DS_Store
+.thumbs.db
+Thumbs.db
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Logs
+logs
+.logs
